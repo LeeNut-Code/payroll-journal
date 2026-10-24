@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="cream">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#e8956b">
+  <meta name="description" content="手账贴纸风的工资可视化：改条目、看到手、存下来、分享给朋友。">
+  <title>工资手账 · Payroll Journal</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="工资手账">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="page">
+    <header class="head">
+      <span class="washi washi--a" aria-hidden="true"></span>
+      <span class="washi washi--b" aria-hidden="true"></span>
+
+      <div class="head-main">
+        <p class="kicker">PAYROLL JOURNAL · 月度手账</p>
+        <h1>我的<mark>工资手账</mark></h1>
+        <p class="lede">把每一笔工资，贴成看得见的生活。</p>
+
+        <div class="themes" role="group" aria-label="纸张配色">
+          <button class="theme" type="button" data-theme="cream" style="--dot:#e8956b" aria-pressed="true"><i></i>奶油</button>
+          <button class="theme" type="button" data-theme="sakura" style="--dot:#e88ba6" aria-pressed="false"><i></i>樱花</button>
+          <button class="theme" type="button" data-theme="retro" style="--dot:#c05a3e" aria-pressed="false"><i></i>复古</button>
+          <button class="theme" type="button" data-theme="mint" style="--dot:#4fa88a" aria-pressed="false"><i></i>薄荷</button>
+        </div>
+      </div>
+
+      <div class="stamp" aria-hidden="true">
+        <span>NO. 10</span>
+        <b id="stampMonth">2026.10</b>
+        <em>MONTHLY PAY</em>
+      </div>
+    </header>
+
+    <div class="shared-banner" id="sharedBanner" hidden>
+      <span>📮 这是朋友分享的一页手账 · <b id="sharedCode"></b></span>
+      <button class="btn btn--tiny btn--accent" type="button" id="forkBtn">抄进我的手账</button>
+    </div>
+
+    <main class="grid">
+      <section class="card card--edit" aria-labelledby="editTitle">
+        <span class="washi washi--card" aria-hidden="true"></span>
+
+        <div class="section-head">
+          <h2 id="editTitle"><span class="num-badge">01</span>工资条目</h2>
+          <p class="hint">逐项填写，合计会变成税前工资。</p>
+        </div>
+
+        <div class="items" id="items"></div>
+        <button class="btn btn--ghost" type="button" id="addItem">＋ 添加条目</button>
+
+        <div class="section-head section-head--gap">
+          <h2><span class="num-badge">02</span>五险一金与扣除</h2>
+        </div>
+
+        <div class="slider-row">
+          <label for="fundRate">公积金比例 <output id="fundRateOut">12%</output></label>
+          <input id="fundRate" type="range" min="5" max="12" step="1" value="12">
+        </div>
+        <div class="slider-row">
+          <label for="special">专项附加扣除 <output id="specialOut">¥0</output></label>
+          <input id="special" type="range" min="0" max="6000" step="100" value="0">
+        </div>
+        <div class="slider-row">
+          <label for="cost">生活开销 <output id="costOut">¥4,000</output></label>
+          <input id="cost" type="range" min="0" max="20000" step="100" value="4000">
+        </div>
+        <div class="slider-row">
+          <label for="goal">储蓄目标 <output id="goalOut">¥3,000</output></label>
+          <input id="goal" type="range" min="0" max="20000" step="100" value="3000">
+        </div>
+
+        <p class="fineprint">按月度换算表估算，五险一金基数取税前工资，年终奖与调薪未计入。</p>
+      </section>
+
+      <section class="card card--result" aria-labelledby="resultTitle">
+        <span class="washi washi--card2" aria-hidden="true"></span>
+
+        <p class="kicker" id="resultTitle">TAKE HOME · 本月到手</p>
+        <p class="net" id="net">¥11,519</p>
+        <p class="net-note" id="netNote">税负率 3.2% · 扣掉开销还能存 ¥7,519</p>
+
+        <div class="chips">
+          <div class="chip"><span>税前</span><b id="chipGross">¥15,500</b></div>
+          <div class="chip"><span>五险一金</span><b id="chipFee">¥3,491</b></div>
+          <div class="chip"><span>个税</span><b id="chipTax">¥491</b></div>
+          <div class="chip"><span>税负率</span><b id="chipRate">3.2%</b></div>
+        </div>
+
+        <div class="bar" role="img" aria-label="税前工资构成：到手、五险一金与个税">
+          <span id="barNet" class="bar-net"></span>
+          <span id="barFee" class="bar-fee"></span>
+          <span id="barTax" class="bar-tax"></span>
+        </div>
+        <div class="legend">
+          <span><i style="background:var(--accent)"></i>到手</span>
+          <span><i style="background:var(--accent2)"></i>五险一金</span>
+          <span><i style="background:var(--ink-soft)"></i>个税</span>
+        </div>
+
+        <div class="jar-block">
+          <div class="jar" aria-hidden="true"><div class="jar-fill" id="jarFill"></div></div>
+          <div class="jar-info">
+            <span class="jar-label">SAVINGS JAR · 储蓄罐</span>
+            <b id="jarSaving">¥7,519</b>
+            <span id="jarGoal">目标 ¥3,000 · 达成 251%</span>
+          </div>
+        </div>
+
+        <div class="mood-block">
+          <p>今天的心情 · MOOD STICKER</p>
+          <div class="moods" id="moods" role="group" aria-label="今天的心情"></div>
+        </div>
+      </section>
+    </main>
+
+    <section class="card card--note" aria-labelledby="noteTitle">
+      <div class="card-head">
+        <h2 id="noteTitle"><span class="num-badge">03</span>写给这个月的自己</h2>
+        <span class="count" id="noteCount">0 / 500</span>
+      </div>
+      <textarea id="notes" maxlength="500" spellcheck="false" placeholder="比如：这个月少喝几杯奶茶，离旅行基金又近了一点。"></textarea>
+    </section>
+
+    <footer class="foot">
+      <div class="foot-actions">
+        <button class="btn btn--accent" type="button" id="shareBtn">📮 分享手账</button>
+        <button class="btn" type="button" id="copyBtn">📋 复制小结</button>
+        <button class="btn" type="button" id="printBtn">⬇️ 下载 PDF</button>
+        <button class="btn" type="button" id="exportBtn">📤 导出 CSV</button>
+        <button class="btn" type="button" id="importBtn">📥 导入 CSV</button>
+        <button class="btn btn--quiet" type="button" id="resetBtn">↺ 重新开始</button>
+      </div>
+      <input type="file" id="importFile" accept=".csv,text/csv" hidden>
+      <p class="disclaimer">按月度换算表估算，五险一金基数取税前工资，年终奖与调薪未计入。<br>数据只保存在这台设备的浏览器里，分享链接 7 天内有效。</p>
+    </footer>
+  </div>
+
+  <dialog class="share-dialog" id="shareDialog" aria-labelledby="shareTitle">
+    <form method="dialog" class="share-inner">
+      <p class="kicker">SHARE · 分享手账</p>
+      <h2 id="shareTitle">这页手账打包好啦</h2>
+      <p class="share-code" id="shareCode">K7F2QX</p>
+      <p class="share-hint">朋友打开链接，就能看到一模一样的工资手账。链接 7 天内有效。</p>
+      <label class="share-link-label" for="shareLink">链接</label>
+      <input id="shareLink" readonly>
+      <div class="share-actions">
+        <button class="btn btn--accent" type="button" id="copyLinkBtn">复制链接</button>
+        <button class="btn" type="submit">关掉</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="update-banner" id="updateBanner" hidden>
+    <span>有新手账纸到货</span>
+    <button class="btn btn--tiny" type="button" id="updateReload">点击刷新</button>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
