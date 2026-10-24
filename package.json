@@ -7,12 +7,13 @@
   "license": "GPL-3.0-only",
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy",
+    "deploy": "cf deploy",
     "tail": "wrangler tail",
     "kv:create": "wrangler kv namespace create JOURNAL_KV",
     "kv:list": "wrangler kv key list --binding JOURNAL_KV --remote"
   },
   "devDependencies": {
-    "wrangler": "^4.129.0"
+    "cf": "^1.0.0-beta.21",
+    "wrangler": "^4.152.0"
   }
 }
