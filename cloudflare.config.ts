@@ -12,6 +12,7 @@ export default defineConfig({
       notFoundHandling: "single-page-application",
       runWorkerFirst: ["/api/*"],
     },
+    domains: ["payroll-journal.leenut.dpdns.org"],
     env: {
       JOURNAL_KV: bindings.kv({ id: "7b4b5abc2e924b4d88a211edfece177a" }),
     },

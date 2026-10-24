@@ -9,7 +9,7 @@ stamps, sticker chips, a savings jar and a mood sticker.
 Built as an installable, offline-capable PWA on **Cloudflare Workers** (static assets plus a small
 KV-backed share API). No framework, no bundler, no runtime dependencies.
 
-> **Live demo:** https://payroll-journal.leenut.workers.dev
+> **Live demo:** https://payroll-journal.leenut.dpdns.org
 
 ## Features
 
@@ -86,7 +86,9 @@ cf builds get <build-uuid>
 cf builds logs get <build-uuid>
 ```
 
-The Worker serves the shell from `public/` and routes `/api/*` to the KV-backed API.
+The Worker serves the shell from `public/` and routes `/api/*` to the KV-backed API. Production is
+published on the custom domain `payroll-journal.leenut.dpdns.org` (declared under `worker.domains`);
+the default `workers.dev` route is disabled.
 
 ## API
 

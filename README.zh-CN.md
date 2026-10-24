@@ -8,7 +8,7 @@
 这是一个可安装、可离线的 PWA，部署在 **Cloudflare Workers**（静态资源 + 一个很小的 KV 分享
 API）。没有框架、没有打包器、没有运行时依赖。
 
-> **在线演示：** https://payroll-journal.leenut.workers.dev
+> **在线演示：** https://payroll-journal.leenut.dpdns.org
 
 ## 功能
 
@@ -83,7 +83,8 @@ cf builds get <build-uuid>
 cf builds logs get <build-uuid>
 ```
 
-Worker 从 `public/` 提供页面外壳，并把 `/api/*` 交给 KV 支撑的分享 API。
+Worker 从 `public/` 提供页面外壳，并把 `/api/*` 交给 KV 支撑的分享 API。生产环境绑定自定义域名
+`payroll-journal.leenut.dpdns.org`（见 `worker.domains`），默认的 `workers.dev` 路由已关闭。
 
 ## API
 
