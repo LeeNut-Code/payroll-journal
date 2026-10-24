@@ -7,12 +7,22 @@ desktop.ini
 *.swp
 *~
 
-# local scratch
-dist/
-.tmp/
-*.log
+# dependencies (wrangler only)
+node_modules/
+package-lock.json
+bun.lock
 
-# deploy caches
+# wrangler / deploy artifacts
 .wrangler/
-.vercel/
-.netlify/
+dev-dist/
+dist/
+worker-configuration.d.ts
+
+# local secrets — never commit
+.dev.vars
+.env
+.env.*
+
+# scratch
+*.log
+.tmp/

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="工资手账">
+  <rect width="512" height="512" rx="96" fill="#fdf7ec"/>
+  <!-- ruled paper -->
+  <g stroke="#e6dcc8" stroke-width="6">
+    <path d="M96 176h320M96 256h320M96 336h320"/>
+  </g>
+  <!-- washi tape -->
+  <rect x="150" y="96" width="212" height="46" rx="6" fill="#f6d7a7" transform="rotate(-6 256 119)"/>
+  <!-- take-home sticker -->
+  <g transform="rotate(-4 256 268)">
+    <rect x="126" y="188" width="260" height="168" rx="22" fill="#fffdf8" stroke="#3b3228" stroke-width="8"/>
+    <text x="256" y="300" font-family="Kaiti SC,KaiTi,serif" font-size="128" font-weight="700"
+          text-anchor="middle" fill="#3b3228">¥</text>
+    <rect x="150" y="322" width="212" height="14" fill="#ffe38a"/>
+  </g>
+  <!-- mood sticker -->
+  <circle cx="392" cy="384" r="42" fill="#e8956b"/>
+  <circle cx="378" cy="376" r="5" fill="#fffdf8"/>
+  <circle cx="406" cy="376" r="5" fill="#fffdf8"/>
+  <path d="M376 396q16 14 32 0" stroke="#fffdf8" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <!-- paper clip -->
+  <circle cx="132" cy="130" r="16" fill="#7fb8a4"/>
+</svg>
