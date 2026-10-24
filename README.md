@@ -9,7 +9,7 @@ stamps, sticker chips, a savings jar and a mood sticker.
 Built as an installable, offline-capable PWA on **Cloudflare Workers** (static assets plus a small
 KV-backed share API). No framework, no bundler, no runtime dependencies.
 
-> **Live demo:** _deployed URL appears here after the first deploy_
+> **Live demo:** https://payroll-journal.leenut.workers.dev
 
 ## Features
 
@@ -48,7 +48,7 @@ cd payroll-journal
 npm install
 
 # 1. create the KV namespace and paste the returned id into wrangler.jsonc
-npm run kv:create
+cf kv namespaces create --title JOURNAL_KV
 
 # 2. run locally: Worker + assets + local KV
 npm run dev            # http://localhost:8787
@@ -68,10 +68,22 @@ curl -sX POST localhost:8787/api/share -H 'content-type: application/json' \
 
 ## Deploy
 
+The project is deployed with the **Cloudflare CLI (`cf`)** and wired to **Cloudflare Workers
+Builds**, so every push to `main` is built and deployed from GitHub.
+
 ```bash
-wrangler login        # or: wrangler login --device   (headless friendly)
-npm run deploy
-npm run tail          # live logs (optional)
+cf auth login --device        # headless-friendly device authorization
+npm run deploy                # cf deploy (local build → Workers)
+```
+
+`cloudflare.config.ts` declares the Worker entrypoint, the SPA asset routing and the
+`JOURNAL_KV` binding; `wrangler.config.ts` keeps the `public/` assets directory for the build.
+The GitHub build trigger is already registered for the `main` branch — check runs with:
+
+```bash
+cf builds create <trigger-uuid> --branch main   # optional manual build
+cf builds get <build-uuid>
+cf builds logs get <build-uuid>
 ```
 
 The Worker serves the shell from `public/` and routes `/api/*` to the KV-backed API.

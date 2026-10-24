@@ -12,8 +12,9 @@ node_modules/
 package-lock.json
 bun.lock
 
-# wrangler / deploy artifacts
+# wrangler / cf / deploy artifacts
 .wrangler/
+.cloudflare/
 dev-dist/
 dist/
 worker-configuration.d.ts

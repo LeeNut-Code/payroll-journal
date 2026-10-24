@@ -8,7 +8,7 @@
 这是一个可安装、可离线的 PWA，部署在 **Cloudflare Workers**（静态资源 + 一个很小的 KV 分享
 API）。没有框架、没有打包器、没有运行时依赖。
 
-> **在线演示：** _首次部署后在此填写地址_
+> **在线演示：** https://payroll-journal.leenut.workers.dev
 
 ## 功能
 
@@ -45,7 +45,7 @@ cd payroll-journal
 npm install
 
 # 1. 创建 KV namespace，把返回的 id 填进 wrangler.jsonc
-npm run kv:create
+cf kv namespaces create --title JOURNAL_KV
 
 # 2. 本地运行：Worker + 静态资源 + 本地 KV
 npm run dev            # http://localhost:8787
@@ -65,10 +65,22 @@ curl -sX POST localhost:8787/api/share -H 'content-type: application/json' \
 
 ## 部署
 
+项目使用 **Cloudflare CLI（`cf`）** 部署，并接入了 **Cloudflare Workers Builds**：每次推送到
+`main` 都会从 GitHub 自动构建并部署。
+
 ```bash
-wrangler login        # 或 wrangler login --device（无头/远程环境）
-npm run deploy
-npm run tail          # 可选：现场日志
+cf auth login --device        # 无头环境用设备授权登录
+npm run deploy                # cf deploy（本地构建后发布到 Workers）
+```
+
+`cloudflare.config.ts` 声明 Worker 入口、SPA 资源路由和 `JOURNAL_KV` 绑定；
+`wrangler.config.ts` 保留 `public/` 静态资源目录供构建使用。GitHub 构建触发器已绑定 `main`
+分支，排查构建时可以：
+
+```bash
+cf builds create <trigger-uuid> --branch main   # 可选：手动触发一次构建
+cf builds get <build-uuid>
+cf builds logs get <build-uuid>
 ```
 
 Worker 从 `public/` 提供页面外壳，并把 `/api/*` 交给 KV 支撑的分享 API。
